@@ -2,6 +2,7 @@
 
 App::uses('Audit', 'AuditLog.Model');
 App::uses('AuditDelta', 'AuditLog.Model');
+App::uses('MtSites', 'MtSites.Utility');
 
 /**
  * Records changes made to an object during save operations.
@@ -185,6 +186,7 @@ class AuditableBehavior extends \ModelBehavior {
 
 		$data = array(
 			'Audit' => array(
+				'tenant' => MtSites::getSiteName(),
 				'event' => $created ? 'CREATE' : 'EDIT',
 				'model' => $Model->plugin ? $Model->plugin . '.' . $Model->alias : $Model->alias,
 				'entity_id' => $Model->id,
