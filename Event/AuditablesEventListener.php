@@ -203,7 +203,7 @@ class AuditablesEventListener implements CakeEventListener {
 
 		$modelData = $this->_getModelData($Model);
 		if (!$modelData) {
-			$this->afterDelete($Model);
+			$this->onAfterDelete($event);
 
 			return true;
 		}
