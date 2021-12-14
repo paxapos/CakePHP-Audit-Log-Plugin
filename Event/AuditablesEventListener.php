@@ -126,9 +126,12 @@ class AuditablesEventListener implements CakeEventListener {
  * @return true Always true.
  */
 	public function onBeforeSave($event) {
+		if ( !Configure::read('auditar')) { 
+			return;
+		}
+
 		$Model = $event->subject();
 		$options = $event->data[0];
-
 		$this->setup($Model);
 
 		// Do not act on the AuditLog related models.
@@ -153,6 +156,10 @@ class AuditablesEventListener implements CakeEventListener {
  * @return true Always true.
  */
 	public function onBeforeDelete($event) {
+		if ( !Configure::read('auditar')) { 
+			return;
+		}
+
 		$Model = $event->subject();
 		$cascade = $event->data[0];
 		$this->setup($Model);
@@ -191,6 +198,10 @@ class AuditablesEventListener implements CakeEventListener {
  * @return true Always true.
  */
 	public function onAfterSave($event) {
+		if ( !Configure::read('auditar')) { 
+			return;
+		}
+
 		$Model = $event->subject();
 		$created = $event->data[0];
 		$options = $event->data[1];
@@ -210,6 +221,12 @@ class AuditablesEventListener implements CakeEventListener {
 
 		$audit[$Model->alias] = $modelData;
 		$audit[$Model->alias][$Model->primaryKey] = $Model->id;
+
+
+		if (!empty($audit[$Model->alias]['AfipData']) ) {
+			//elimino este objeto porque no hay que guardarlo
+			unset($audit[$Model->alias]['AfipData']);
+		}
 
 		// Create a runtime association with the Audit model
 		$Model->bindModel(
@@ -333,6 +350,10 @@ class AuditablesEventListener implements CakeEventListener {
  * @return void
  */
 	public function onAfterDelete($event) {
+		if ( !Configure::read('auditar')) { 
+			return;
+		}
+		
 		$Model = $event->subject();
 		$this->setup($Model);
 
@@ -484,7 +505,7 @@ class AuditablesEventListener implements CakeEventListener {
  * @return bool True if yes, else false.
  */
 	protected function _isAuditLogModel(Model $Model) {
-		return $Model->name === 'Audit' || $Model->name === 'AuditDelta';
+		return $Model->name === 'Audit' || $Model->name === 'AuditDelta'; 
 	}
 
 /**
