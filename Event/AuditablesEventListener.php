@@ -169,7 +169,7 @@ class AuditablesEventListener implements CakeEventListener {
 		}
 
 		// Skip, if no ID to delete was given.
-		if ($Model->id === false) {
+		if ( empty($Model->id) ) {
 			return true;
 		}
 
@@ -182,6 +182,11 @@ class AuditablesEventListener implements CakeEventListener {
 				'conditions' => array($Model->alias . '.' . $Model->primaryKey => $Model->id),
 			)
 		);
+
+		if ( !$original ) {
+			return true;
+		}
+
 		$this->_setOriginalDataForModel($Model, $original[$Model->alias]);
 
 		$this->_restoreVirtualFields($Model);
