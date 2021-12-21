@@ -309,6 +309,7 @@ class AuditableBehavior extends \ModelBehavior {
 		$audit = array($Model->alias => $this->_getOriginalDataForModel($Model));
 		$data = array(
 			'Audit' => array(
+				'tenant' => MtSites::getSiteName(),
 				'event' => 'DELETE',
 				'model' => $Model->plugin ? $Model->plugin . '.' . $Model->alias : $Model->alias,
 				'entity_id' => $Model->id,
