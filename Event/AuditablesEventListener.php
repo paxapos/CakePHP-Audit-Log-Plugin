@@ -1,17 +1,13 @@
 <?php
 
 App::uses('CakeEventListener', 'Event');
-App::uses('Printaitor', 'Printers.Utility');
-App::uses('ReceiptPrint', 'Printers.Utility');
 
 
 /**
- * Nodes Event Handler
+ * AuditablesEventListener Event Handler
  *
  * @category Event
- * @package  Croogo.Nodes.Event
- * @license  http://www.opensource.org/licenses/mit-license.php The MIT License
- * @link     http://www.croogo.org
+ * @package  AuditLog.Event
  */
 class AuditablesEventListener implements CakeEventListener {
 
@@ -380,6 +376,7 @@ class AuditablesEventListener implements CakeEventListener {
 		$audit = array($Model->alias => $this->_getOriginalDataForModel($Model));
 		$data = array(
 			'Audit' => array(
+				'tenant' => MtSites::getSiteName(),
 				'event' => 'DELETE',
 				'model' => $Model->plugin ? $Model->plugin . '.' . $Model->alias : $Model->alias,
 				'entity_id' => $Model->id,
