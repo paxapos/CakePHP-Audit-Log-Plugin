@@ -122,9 +122,6 @@ class AuditablesEventListener implements CakeEventListener {
  * @return true Always true.
  */
 	public function onBeforeSave($event) {
-		if ( !Configure::read('auditar')) { 
-			return;
-		}
 
 		$Model = $event->subject();
 		$options = $event->data[0];
@@ -152,10 +149,7 @@ class AuditablesEventListener implements CakeEventListener {
  * @return true Always true.
  */
 	public function onBeforeDelete($event) {
-		if ( !Configure::read('auditar')) { 
-			return;
-		}
-
+		
 		$Model = $event->subject();
 		$cascade = $event->data[0];
 		$this->setup($Model);
@@ -199,10 +193,7 @@ class AuditablesEventListener implements CakeEventListener {
  * @return true Always true.
  */
 	public function onAfterSave($event) {
-		if ( !Configure::read('auditar')) { 
-			return;
-		}
-
+	
 		$Model = $event->subject();
 		$created = $event->data[0];
 		$options = $event->data[1];
@@ -351,10 +342,7 @@ class AuditablesEventListener implements CakeEventListener {
  * @return void
  */
 	public function onAfterDelete($event) {
-		if ( !Configure::read('auditar')) { 
-			return;
-		}
-		
+				
 		$Model = $event->subject();
 		$this->setup($Model);
 
