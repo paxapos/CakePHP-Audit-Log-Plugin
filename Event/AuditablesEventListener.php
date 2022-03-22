@@ -293,7 +293,12 @@ class AuditablesEventListener implements CakeEventListener {
 		// or if something we care about actually changed.
 		if ($created || count($updates)) {
 			$Model->Audit->create();
-			$Model->Audit->save($data);
+			if ( !$Model->Audit->save($data) ) {
+				throw new CakeException("erro al guardar audit");
+			}
+			//Enviar evento de Audit
+            $event = new CakeEvent('Audit.create', $Model->Audit, $data);
+            $Model->Audit->getEventManager()->dispatch($event);
 
 			if ($created) {
 				if ($Model->hasMethod('afterAuditCreate')) {
@@ -313,6 +318,11 @@ class AuditablesEventListener implements CakeEventListener {
 
 				$Model->Audit->AuditDelta->create();
 				$Model->Audit->AuditDelta->save($delta);
+
+				//Enviar evento de Audit
+				$event = new CakeEvent('AuditDelta.update', $Model->Audit->AuditDelta, $data + $delta);
+				$Model->Audit->AuditDelta->getEventManager()->dispatch($event);
+	
 
 				if (!$created && $Model->hasMethod('afterAuditProperty')) {
 					$Model->afterAuditProperty(
